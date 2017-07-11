@@ -4,32 +4,43 @@ if [[ "$1" == "loft" ]]; then
 
   if [[ "$2" == "up" ]]; then
     curl -sS "http://192.168.1.200/cgi-bin/control?action=32&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
-  fi
 
-if [[ "$2" == "down" ]]; then
-  curl -sS "http://192.168.1.200/cgi-bin/control?action=33&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+  elif [[ "$2" == "down" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=33&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+
+  elif [[ "$2" == "info" ]]; then
+    curl -sS "http://192.168.1.200/zonedata/controller_1_zone_5.xml"
+
+  elif [[ "$2" == "meta" ]]; then
+    curl -sS "http://192.168.1.200/metadata/metadata_source_1.xml"
+
+  elif [[ "$2" == "off" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=1&zoneid=5&value=0&controllerid=1&controllertype=1" > /dev/null
+
+  elif [[ "$2" == "on" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=1&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+  elif [[ "$2" == "xm" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=7&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+  elif [[ "$2" == "comp" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=7&zoneid=5&value=6&controllerid=1&controllertype=1" > /dev/null
+
+
+  elif [[ "$2" == "next" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=23&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+  elif [[ "$2" == "back" ]]; then
+    curl -sS "http://192.168.1.200/cgi-bin/control?action=24&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
+
+
+else
+  echo "Invalid command!"
+  exit
+
+
 fi
-
-
-if [[ "$2" == "info" ]]; then
-  curl -sS "http://192.168.1.200/zonedata/controller_1_zone_5.xml"
-
-
-
-
-fi
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 fi
