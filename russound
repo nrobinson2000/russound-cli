@@ -5,10 +5,8 @@ if [[ "$1" == "loft" ]]; then
   if [[ "$2" == "up" ]]; then
     curl -sS "http://192.168.1.200/cgi-bin/control?action=32&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
 
-
   elif [[ "$2" == "down" ]]; then
     curl -sS "http://192.168.1.200/cgi-bin/control?action=33&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
-
 
   elif [[ "$2" == "info" ]]; then
     curl -sS "http://192.168.1.200/zonedata/controller_1_zone_5.xml"
@@ -39,7 +37,6 @@ if [[ "$1" == "loft" ]]; then
 else
   echo "Invalid command!"
   exit
-
 
 fi
 
