@@ -1,5 +1,35 @@
 #!/bin/bash
 
+blue_echo()
+{
+    if [ -t 1 ];
+    then
+        echo "$(tput setaf 6)$(tput bold)$1$(tput sgr0)"
+    else
+        echo "$1"
+    fi
+}
+
+green_echo()
+{
+    if [ -t 1 ];
+    then
+        echo "$(tput setaf 2)$(tput bold)$1$(tput sgr0)"
+    else
+        echo "$1"
+    fi
+}
+
+red_echo()
+{
+    if [ -t 1 ];
+    then
+        echo "$(tput setaf 1)$(tput bold)$1$(tput sgr0)"
+    else
+        echo "$1"
+    fi
+}
+
 if [[ "$1" == "loft" ]]; then
 
   if [[ "$2" == "up" ]]; then
@@ -9,10 +39,52 @@ if [[ "$1" == "loft" ]]; then
     curl -sS "http://192.168.1.200/cgi-bin/control?action=33&zoneid=5&value=1&controllerid=1&controllertype=1" > /dev/null
 
   elif [[ "$2" == "info" ]]; then
-    curl -sS "http://192.168.1.200/zonedata/controller_1_zone_5.xml"
+    INFO=$(curl -sS "http://192.168.1.200/zonedata/controller_1_zone_5.xml" | sed 's/<[^>]*>//g' | xargs)
 
-  elif [[ "$2" == "meta" ]]; then
-    curl -sS "http://192.168.1.200/metadata/metadata_source_1.xml"
+    META=$(curl -sS "http://192.168.1.200/metadata/metadata_source_1.xml" | grep "CDATA" | grep -v -- "-----" | sed 's/.*\[\([^]]*\)\].*/\1/g')
+
+    INFO_VALUES=($INFO)
+    echo
+
+    case "${INFO_VALUES[2-1]}" in
+      5 )
+      echo "$(tput setaf 6)$(tput bold)Source:  $(tput setaf 7)Computer$(tput sgr0)"
+        ;;
+
+        0 )
+        echo "$(tput setaf 6)$(tput bold)Source:  $(tput setaf 7)Sirius XM$(tput sgr0)"
+          ;;
+
+          * )
+          echo "$(tput setaf 6)$(tput bold)Source:  $(tput setaf 7)Other$(tput sgr0)"
+            ;;
+    esac
+
+    case "${INFO_VALUES[3-1]}" in
+      0 )
+      echo "$(tput setaf 6)$(tput bold)Volume:  $(tput setaf 7)Muted$(tput sgr0)"
+        ;;
+
+        * )
+        echo "$(tput setaf 6)$(tput bold)Volume:  $(tput setaf 7)${INFO_VALUES[3-1]}$(tput sgr0)"
+          ;;
+    esac
+
+
+    if [[ "${INFO_VALUES[2-1]}" == 0 ]]; then
+      echo $(tput setaf 6)$(tput bold)Station: $(tput setaf 7)$(echo "$META" | tail -1 )$(tput sgr0)
+    fi
+
+    if [[ "${INFO_VALUES[2-1]}" == 0 ]]; then
+      echo $(tput setaf 6)$(tput bold)"Artist:  "$(tput setaf 7)$(echo "$META" | head -1)$(tput sgr0)
+    fi
+
+    if [[ "${INFO_VALUES[2-1]}" == 0 ]]; then
+      echo $(tput setaf 6)$(tput bold)"Song:    "$(tput setaf 7)$(echo "$META" | sed "2!d")$(tput sgr0)
+    fi
+
+
+echo
 
   elif [[ "$2" == "off" ]]; then
     curl -sS "http://192.168.1.200/cgi-bin/control?action=1&zoneid=5&value=0&controllerid=1&controllertype=1" > /dev/null
@@ -35,7 +107,9 @@ if [[ "$1" == "loft" ]]; then
 
 
 else
-  echo "Invalid command!"
+  echo
+  echo "$(tput setaf 1)$(tput bold)Invalid command $2!$(tput sgr0)"
+  echo
   exit
 
 fi
