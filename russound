@@ -1,35 +1,5 @@
 #!/bin/bash
 
-blue_echo()
-{
-    if [ -t 1 ];
-    then
-        echo "$(tput setaf 6)$(tput bold)$1$(tput sgr0)"
-    else
-        echo "$1"
-    fi
-}
-
-green_echo()
-{
-    if [ -t 1 ];
-    then
-        echo "$(tput setaf 2)$(tput bold)$1$(tput sgr0)"
-    else
-        echo "$1"
-    fi
-}
-
-red_echo()
-{
-    if [ -t 1 ];
-    then
-        echo "$(tput setaf 1)$(tput bold)$1$(tput sgr0)"
-    else
-        echo "$1"
-    fi
-}
-
 if [[ "$1" == "loft" ]]; then
 
   if [[ "$2" == "up" ]]; then
